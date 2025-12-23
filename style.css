@@ -1,0 +1,244 @@
+/* --- 1. CONFIGURATION GÉNÉRALE --- */
+:root {
+    --primary-color: #2c3e50;    /* Bleu nuit */
+    --accent-color: #3498db;     /* Bleu clair */
+    --danger-color: #e74c3c;     /* Rouge */
+    --bg-light: #f4f4f9;         /* Gris très clair */
+    --sidebar-width: 320px;
+    --header-height: 60px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-light);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Empêche le scroll global, on scroll dans les zones précises */
+}
+
+/* --- 2. BARRE SUPÉRIEURE --- */
+.top-bar {
+    height: var(--header-height);
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 100;
+}
+
+.top-bar h1 {
+    font-size: 1.2rem;
+    margin: 0;
+    margin-left: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#toggleMenuBtn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+/* --- 3. CONTENEUR PRINCIPAL --- */
+.app-container {
+    display: flex;
+    flex: 1; /* Prend toute la hauteur restante */
+    overflow: hidden;
+    position: relative;
+}
+
+/* --- 4. SIDEBAR (PANNEAU LATÉRAL) --- */
+.sidebar {
+    width: var(--sidebar-width);
+    background: white;
+    border-right: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease;
+    
+    /* Pour le mobile : par défaut visible sur desktop, cachable */
+    position: relative; 
+    z-index: 50;
+}
+
+/* Classe pour cacher la sidebar (utilisée par le JS) */
+.sidebar.hidden {
+    display: none; /* Ou transform: translateX(-100%) pour une animation */
+}
+
+/* Onglets de navigation */
+.tabs-nav {
+    display: flex;
+    border-bottom: 1px solid #ddd;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 15px;
+    background: #f8f9fa;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    font-weight: 600;
+    color: #666;
+    transition: 0.2s;
+}
+
+.tab-btn.active {
+    background: white;
+    color: var(--accent-color);
+    border-bottom-color: var(--accent-color);
+}
+
+/* Contenu des onglets */
+.tab-content {
+    display: none; /* Caché par défaut */
+    flex-direction: column;
+    flex: 1; /* Remplit l'espace vertical du panneau */
+    overflow: hidden;
+    padding: 10px;
+}
+
+.tab-content.active {
+    display: flex;
+}
+
+/* --- 5. ÉLÉMENTS DE FORMULAIRE & LISTES --- */
+input, select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-size: 1rem;
+}
+
+button {
+    cursor: pointer;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background: #eee;
+    padding: 8px 12px;
+}
+
+button:hover {
+    background: #ddd;
+}
+
+.playlist-actions, .reorder-actions {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.playlist-actions button, .reorder-actions button {
+    flex: 1;
+    font-size: 0.9rem;
+}
+
+.btn-danger { color: white; background-color: var(--danger-color); border: none; }
+.btn-primary { color: white; background-color: var(--accent-color); border: none; padding: 10px 20px; font-size: 1rem; }
+.btn-danger {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+}
+
+.btn-danger:hover {
+    background-color: #c0392b;
+}
+
+/* Les listes de chants (Explorer & Playlist) */
+.list-container {
+    flex: 1; /* Prend tout l'espace restant pour scroller */
+    overflow-y: auto;
+    border: 1px solid #eee;
+    border-radius: 4px;
+}
+
+.song-item {
+    padding: 12px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.song-item:hover {
+    background-color: #f0f8ff;
+}
+
+.song-item.selected {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.song-item small {
+    display: block;
+    color: #888;
+    margin-top: 4px;
+}
+.song-item.selected small { color: #e6f2ff; }
+
+/* --- 6. VIEWER (ZONE PRINCIPALE) --- */
+.viewer {
+    flex: 1;
+    background-color: white;
+    padding: 20px 40px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centre le contenu si écran large */
+}
+
+#song-display-area {
+    max-width: 800px;
+    width: 100%;
+    background: white;
+}
+
+#songTitle { margin-bottom: 5px; color: var(--primary-color); font-size: 2rem; }
+#songAuthor { margin-top: 0; font-style: italic; }
+
+/* LE POINT CRUCIAL POUR LES PAROLES */
+.lyrics-content {
+    white-space: pre-line; /* Respecte les sauts de ligne */
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: #222;
+    margin-top: 20px;
+    padding-bottom: 50px;
+}
+
+/* --- 7. RESPONSIVE (MOBILE) --- */
+@media (max-width: 768px) {
+    /* Sur mobile, la sidebar prend tout l'écran */
+    .sidebar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%; /* Plein écran */
+    }
+
+    /* Le viewer est toujours là en dessous */
+    .viewer {
+        padding: 15px;
+    }
+
+    /* Ajustement des tailles de police */
+    #songTitle { font-size: 1.5rem; }
+    .lyrics-content { font-size: 1.1rem; }
+}

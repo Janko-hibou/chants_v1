@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ma Bibliothèque de Chants</title>
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2c3e50">
+</head>
+<body>
+
+    <nav class="top-bar">
+        <button id="toggleMenuBtn" aria-label="Ouvrir le menu">☰</button>
+        <h1>Bibliothèque de Chants</h1>
+    </nav>
+
+    <div class="app-container">
+        
+        <aside id="sidebar" class="sidebar">
+            
+            <div class="tabs-nav">
+                <button id="btn-tab-explorer" class="tab-btn active" onclick="switchTab('tab-explorer')">
+                    🔍 Explorer
+                </button>
+                <button id="btn-tab-listes" class="tab-btn" onclick="switchTab('tab-listes')">
+                    📋 Mes Listes
+                </button>
+            </div>
+
+            <div id="tab-explorer" class="tab-content active">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Rechercher titre ou auteur..." onkeyup="filterSongs()">
+                </div>
+                <div id="explorerList" class="list-container">
+                    </div>
+            </div>
+
+            <div id="tab-listes" class="tab-content">
+                
+                <div class="playlist-controls">
+                    <select id="playlistSelect" onchange="loadSelectedPlaylist()">
+                        </select>
+                </div>
+
+                <div class="playlist-actions">
+                    <button onclick="createList()" title="Nouvelle liste">➕</button>
+                    <button onclick="renameList()" title="Renommer la liste">✏️</button>
+                    <button onclick="deleteList()" title="Supprimer la liste" class="btn-danger">🗑️</button>
+                </div>
+
+                <div id="currentPlaylistContainer" class="list-container">
+                    </div>
+
+				<div class="reorder-actions">
+					<button onclick="moveSongInPlaylist(-1)">⬆️ Monter</button>
+					<button onclick="moveSongInPlaylist(1)">⬇️ Descendre</button>
+					<button onclick="removeSongFromPlaylist()" class="btn-danger" title="Retirer de la liste">✖ Retirer</button>
+				</div>
+            </div>
+        </aside>
+
+        <main id="main-content" class="viewer">
+            <div id="song-display-area">
+                <h2 id="songTitle">Bienvenue</h2>
+                <h4 id="songAuthor" style="color: #666;">Sélectionnez un chant dans le menu</h4>
+                <hr>
+                <div id="songLyrics" class="lyrics-content"></div>
+                
+                <div id="viewer-actions" style="margin-top: 30px; display: none;">
+                    <hr>
+                    <button id="btnAddToPlaylist" class="btn-primary" onclick="addCurrentSongToPlaylist()">
+                        Ajouter à la liste en cours
+                    </button>
+                </div>
+            </div>
+        </main>
+
+    </div>
+
+	<script src="database.js"></script>
+
+	<script src="script.js"></script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js')
+                .then(() => console.log('Service Worker enregistré'))
+                .catch(err => console.error('Erreur SW:', err));
+        }
+    </script>
+
+</body>
+</html>
